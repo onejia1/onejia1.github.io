@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给最特别的你</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            animation: float 6s ease-in-out infinite;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #ff6b6b, #ffa3a3, #f8e1e1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(255, 107, 107, 0.3);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .heart {
+            font-size: 3rem;
+            color: #ff6b6b;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+            cursor: pointer;
+            margin: 1rem 0;
+        }
+
+        .button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            outline: none;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+        }
+
+        /* 星空背景 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        /* 流星 */
+        .shooting-star {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, rgba(255,255,255,0.8), transparent);
+            border-radius: 50%;
+            animation: shooting var(--shooting-duration) linear infinite;
+            opacity: 0;
+        }
+
+        .shooting-star::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(255,255,255,0.8), transparent);
+            transform-origin: left center;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes shooting {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(1000px) translateY(300px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotateY(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotateY(5deg);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <div class="container">
+        <h1>致我生命中最特别的人</h1>
+        <p>在浩瀚的宇宙中，我们相遇的概率比星星相撞还要小</p>
+        <p>但命运却让我们找到了彼此</p>
+        <p>每一天与你相处的时光，都像这星空一样璀璨</p>
+        <div class="heart" onclick="showMessage()">❤️</div>
+        <p id="secret-message" style="display: none; font-style: italic;">
+            我喜欢你，比银河里的星星还要多<br>
+            愿意和我一起书写我们的故事吗？
+        </p>
+        <button class="button" onclick="showConfetti()">我愿意</button>
+    </div>
+
+    <script>
+        // 创建星空
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starCount = 200;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.opacity = Math.random();
+                star.style.setProperty('--duration', `${Math.random() * 5 + 3}s`);
+                starsContainer.appendChild(star);
+            }
+            
+            // 创建流星
+            setInterval(() => {
+                const shootingStar = document.createElement('div');
+                shootingStar.className = 'shooting-star';
+                shootingStar.style.left = `${Math.random() * 30}%`;
+                shootingStar.style.top = `${Math.random() * 30}%`;
+                shootingStar.style.setProperty('--shooting-duration', `${Math.random() * 3 + 2}s`);
+                starsContainer.appendChild(shootingStar);
+                
+                // 移除流星元素以避免内存泄漏
+                setTimeout(() => {
+                    shootingStar.remove();
+                }, 3000);
+            }, 2000);
+        }
+
+        // 显示隐藏的消息
+        function showMessage() {
+            const message = document.getElementById('secret-message');
+            message.style.display = message.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // 创建彩色纸屑效果
+        function showConfetti() {
+            const button = document.querySelector('.button');
+            button.textContent = '❤️ 永远爱你 ❤️';
+            button.style.background = 'linear-gradient(45deg, #ff6b6b, #ff8e8e, #ffb3b3)';
+            
+            // 创建纸屑
+            for (let i = 0; i < 100; i++) {
+                createConfettiPiece();
+            }
+            
+            // 改变背景颜色
+            document.body.style.background = 'linear-gradient(135deg, #302b63, #24243e, #0f0c29)';
+        }
+
+        function createConfettiPiece() {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'fixed';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.backgroundColor = getRandomColor();
+            confetti.style.left = `${Math.random() * 100}vw`;
+            confetti.style.top = '-10px';
+            confetti.style.borderRadius = '50%';
+            confetti.style.zIndex = '100';
+            document.body.appendChild(confetti);
+            
+            // 动画
+            const animation = confetti.animate([
+                { transform: `translateY(0) rotate(0deg) translateX(${Math.random() * 100 - 50}px)`, opacity: 1 },
+                { transform: `translateY(100vh) rotate(${Math.random() * 360}deg) translateX(${Math.random() * 100 - 50}px)`, opacity: 0 }
+            ], {
+                duration: Math.random() * 3000 + 2000,
+                easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+            });
+            
+            animation.onfinish = () => confetti.remove();
+        }
+
+        function getRandomColor() {
+            const colors = ['#ff6b6b', '#ff8e8e', '#ffb3b3', '#a5dff9', '#9d65c9', '#f8e1e1'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // 页面加载时创建星空
+        window.onload = createStars;
+    </script>
+</body>
+</html>
